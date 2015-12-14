@@ -11,7 +11,7 @@
      * @constructor
      */
     var Analysjs = function() {
-        if (!analytics) {
+        if (typeof analytics === "undefined" || analytics === null) {
             throw new Error('The "analytics" object could not be found. ' +
                 'Check if the segment.io library was installed correctly.');
         }
