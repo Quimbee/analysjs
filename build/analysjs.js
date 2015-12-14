@@ -1,56 +1,3 @@
-/* jshint ignore:start */
-
-// Create a queue, but don't obliterate an existing one!
-window.analytics = window.analytics || [];
-
-// A list of the methods in Analytics.js to stub.
-window.analytics.methods = ['identify', 'group', 'track',
-    'page', 'pageview', 'alias', 'ready', 'on', 'once', 'off',
-    'trackLink', 'trackForm', 'trackClick', 'trackSubmit'];
-
-// Define a factory to create stubs. These are placeholders
-// for methods in Analytics.js so that you never have to wait
-// for it to load to actually record data. The `method` is
-// stored as the first argument, so we can replay the data.
-window.analytics.factory = function(method){
-    return function(){
-        var args = Array.prototype.slice.call(arguments);
-        args.unshift(method);
-        window.analytics.push(args);
-        return window.analytics;
-    };
-};
-
-// For each of our methods, generate a queueing stub.
-for (var i = 0; i < window.analytics.methods.length; i++) {
-    var key = window.analytics.methods[i];
-    window.analytics[key] = window.analytics.factory(key);
-}
-
-// Define a method to load Analytics.js from our CDN,
-// and that will be sure to only ever load it once.
-window.analytics.load = function(key){
-    if (document.getElementById('analytics-js')) return;
-
-    // Create an async script element based on your key.
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.id = 'analytics-js';
-    script.async = true;
-    script.src = ('https:' === document.location.protocol
-        ? 'https://' : 'http://')
-        + 'cdn.segment.io/analytics.js/v1/'
-        + key + '/analytics.min.js';
-
-    // Insert our script next to the first script element.
-    var first = document.getElementsByTagName('script')[0];
-    first.parentNode.insertBefore(script, first);
-};
-
-// Add a version to keep track of what's in the wild.
-window.analytics.SNIPPET_VERSION = '2.0.9';
-
-/* jshint ignore:end */
 (function(global, $) {
 
     /**
@@ -62,47 +9,6 @@ window.analytics.SNIPPET_VERSION = '2.0.9';
         if (!analytics) {
             throw new Error('The "analytics" object could not be found. ' +
                 'Check if the segment.io library was installed correctly.');
-        }
-    };
-
-    /**
-     * Load the analytics library. If the key is not defined
-     * then all analytics methods will be empty, just a stub.
-     *
-     * @param key
-     * @param identify
-     */
-    Analysjs.prototype.load = function(key, profile, shouldAlias, callback) {
-        if (key && key.length) {
-            analytics.load(key);
-            analytics.ready(function(){
-                profile = profile || {};
-
-                var user = analytics.user();
-                if (!user || !user.id()) {
-                    var distinct_id = profile.distinct_id || profile.id;
-                    if (distinct_id) {
-                        if (shouldAlias) {
-                            analytics.alias(distinct_id);
-                        }
-                        analytics.identify(distinct_id, profile);
-                    } else {
-                        analytics.identify(profile);
-                    }
-                }
-                if (callback) {
-                    $(function() {
-                        callback();
-                    });
-                }
-            });
-        } else {
-            var emptyMethod = function() {};
-            var methods = analytics.methods;
-            for (var i in methods) {
-                var name = methods[i];
-                analytics[name] = emptyMethod;
-            }
         }
     };
 
@@ -210,6 +116,7 @@ window.analytics.SNIPPET_VERSION = '2.0.9';
     global.analysjs = new Analysjs();
 
 })(this, this.jQuery || this.ender);
+
 (function(global, $) {
 
     /**

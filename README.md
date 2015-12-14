@@ -12,10 +12,8 @@ Check Segment.io page for details:
 Install/Load
 ------------
 
-You must call `analysjs.load(apiToken, identify)` in order to install the segment.io lib.
-
-**Note:** Set `null` on `apiToken` in order to disable metric tracking.
-
+You must load segment's Analytics.js library **before** you load this library.
+See https://segment.com/docs/libraries/analytics.js/quickstart/.
 
 Element metric binding
 ----------------------
@@ -28,16 +26,18 @@ The other `data-metric-*` attributes will be passed to the event as its properti
 ```html
 <button type="button"
     data-metric="Signup"
-    data-metric-cupom-code="A9XJL31"
+    data-metric-coupon-code="A9XJL31"
     data-metric-revenue="9.90">Sign Up</button>
 ```
 
-The metric name will be **Signup** and two properties will be sended, `cupomCode` and `revenue`.
+The metric name will be **Signup** and two properties will be sent, `couponCode` and `revenue`.
 
 ### The auto-bind behaviour
-When the plugin is loaded it looks for all elements that has a valid `data-metric` attribute (which will be used as the name of the event) and register specific events/behavior for each case:
+
+When the plugin is loaded it looks for all elements having a valid `data-metric` attribute (which will be used as the name of the event) and registers specific events/behavior for each case:
 
 #### 1 - When the element is an `<a>`
+
 The library calls `analytics.trackLink` with the properties found on the element.
 ```html
 <a href="/signup"
@@ -47,6 +47,7 @@ The library calls `analytics.trackLink` with the properties found on the element
 Check the original documentation https://segment.io/libraries/analytics.js#trackLink
 
 #### 2 - When the element is an `<form>`
+
 The library calls `analytics.trackForm` with the properties found on the element.
 ```html
 <form action="/signup" method="POST"
@@ -55,12 +56,14 @@ The library calls `analytics.trackForm` with the properties found on the element
 Check the original documentation https://segment.io/libraries/analytics.js#trackForm
 
 #### 3 - When the element is an `<button>`
+
 A click event will be binded and when triggered will call `analytics.track` with the properties found on the element.
 ```html
 <button data-metric="Signin">Sign In</button>
 ```
 
 #### 4 - Any other element
+
  - It will look for a `data-metric-page-view`, if found and `true` a page view event will be tracked, through `analytics.page`. Also a `data-metric-page-category` can be specified.
  ```html
  <div data-metric="Home page"
@@ -80,8 +83,8 @@ Check the original documentation https://segment.io/libraries/analytics.js#page
 
  - Otherwise it will be ignored by auto-bind, being useful only if you call the `triggerMetric` plugin. Check below.
 
-
 ### The `$(el).triggerMetric()` method
+
 An useful method to trigger metric manually, using the properties defined on the element itself.
 
 ```html
@@ -91,6 +94,7 @@ An useful method to trigger metric manually, using the properties defined on the
     ...
 </div>
 ```
+
 ```js
 function onSuccess() {
     $('#success-notification').triggerMetric({

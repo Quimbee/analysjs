@@ -13,47 +13,6 @@
     };
 
     /**
-     * Load the analytics library. If the key is not defined
-     * then all analytics methods will be empty, just a stub.
-     *
-     * @param key
-     * @param identify
-     */
-    Analysjs.prototype.load = function(key, profile, shouldAlias, callback) {
-        if (key && key.length) {
-            analytics.load(key);
-            analytics.ready(function(){
-                profile = profile || {};
-
-                var user = analytics.user();
-                if (!user || !user.id()) {
-                    var distinct_id = profile.distinct_id || profile.id;
-                    if (distinct_id) {
-                        if (shouldAlias) {
-                            analytics.alias(distinct_id);
-                        }
-                        analytics.identify(distinct_id, profile);
-                    } else {
-                        analytics.identify(profile);
-                    }
-                }
-                if (callback) {
-                    $(function() {
-                        callback();
-                    });
-                }
-            });
-        } else {
-            var emptyMethod = function() {};
-            var methods = analytics.methods;
-            for (var i in methods) {
-                var name = methods[i];
-                analytics[name] = emptyMethod;
-            }
-        }
-    };
-
-    /**
      * @param $el
      * @returns {Object}
      * @private

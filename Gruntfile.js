@@ -1,7 +1,6 @@
 module.exports = function(grunt) {
 
     var sources = [
-        'src/load.js',
         'src/lib.js',
         'src/plugin.js'
     ];
@@ -22,7 +21,7 @@ module.exports = function(grunt) {
             dist : {
                 options : {
                     sourceMap : 'build/analysjs.js.map',
-                    sourceMappingURL : 'https://raw.github.com/vendji/analysjs/master/build/analysjs.js.map'
+                    sourceMappingURL : 'https://raw.github.com/Quimbee/analysjs/master/build/analysjs.js.map'
                 },
                 src : 'build/analysjs.js',
                 dest : 'build/analysjs.min.js'
