@@ -1,3 +1,8 @@
+/*
+ * Repo: https://github.com/Quimbee/analysjs
+ * Forked by Quimbee from: https://github.com/vendji/analysjs
+ */
+
 (function(global, $) {
 
     /**
